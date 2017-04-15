@@ -49,11 +49,13 @@ public class MainActivity extends AppCompatActivity {
     private ImageView ivKey;
     private Integer pointerId;
     private KeyColor keyColor;
+    private MediaPlayer mediaPlayer;
 
     public KeyInfo(ImageView ivKey, KeyColor keyColor, Integer pointerId) {
       this.ivKey = ivKey;
       this.pointerId = pointerId;
       this.keyColor = keyColor;
+      this.mediaPlayer = null;
       keyInfos.add(this);
     }
 
@@ -71,6 +73,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setPointerId(Integer pointerId) {
       this.pointerId = pointerId;
+    }
+
+    public MediaPlayer getMediaPlayer() {
+      return mediaPlayer;
+    }
+
+    public void setMediaPlayer(MediaPlayer mediaPlayer) {
+      this.mediaPlayer = mediaPlayer;
     }
   }
 
@@ -101,21 +111,26 @@ public class MainActivity extends AppCompatActivity {
 
         KeyInfo pressedKeyInfo = findPressedKeyInfo(pX, pY);
         if (pressedKeyInfo != null) {
+          setPressed(pressedKeyInfo, true);
           if (pressedKeyInfo.getPointerId() == null) {
             pressedKeyInfo.setPointerId(pId);
-            setPressed(pressedKeyInfo, true);
+            
+            if (pressedKeyInfo.getMediaPlayer() != null) {
+              pressedKeyInfo.getMediaPlayer().release();
+            }
 
-            final MediaPlayer player;
+            MediaPlayer player = new MediaPlayer();
+            pressedKeyInfo.setMediaPlayer(player);
             try {
               AssetFileDescriptor afd = getAssets().openFd("d" + keyInfos.indexOf(pressedKeyInfo) + ".wav");
-              player = new MediaPlayer();
               player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
               player.prepare();
               player.start();
+              final MediaPlayer finalPlayer = player;
               player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-                  player.release();
+                  finalPlayer.release();
                 }
               });
             } catch (IOException e) {
@@ -190,29 +205,4 @@ public class MainActivity extends AppCompatActivity {
       }
     }
   }
-
-//    @Override
-//    public void onClick(View v) {
-//        for (int i = 0; i < imageViews.length; i++) {
-//            if (imageViews[i].getId() == v.getId()) {
-//                AssetFileDescriptor afd;
-//                final MediaPlayer player;
-//                try {
-//                    afd = getAssets().openFd("d" + i + ".wav");
-//                    player = new MediaPlayer();
-//                    player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-//                    player.prepare();
-//                    player.start();
-//                    player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-//                        @Override
-//                        public void onCompletion(MediaPlayer mp) {
-//                            player.release();
-//                        }
-//                    });
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
 }

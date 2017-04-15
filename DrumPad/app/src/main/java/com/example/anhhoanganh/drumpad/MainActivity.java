@@ -5,7 +5,6 @@ import android.media.MediaPlayer;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -89,9 +88,7 @@ public class MainActivity extends AppCompatActivity {
     int lastPointerIndex = MotionEventCompat.getActionIndex(event);
     int pointerAction = event.getActionMasked();
 
-    if (pointerAction == MotionEvent.ACTION_MOVE
-            || pointerAction == MotionEvent.ACTION_DOWN
-            || pointerAction == MotionEvent.ACTION_POINTER_DOWN) {
+    if (pointerAction == MotionEvent.ACTION_MOVE) {
       for (int pIndex = 0; pIndex < event.getPointerCount(); pIndex++) {
         int pId = event.getPointerId(pIndex);
         float pX = event.getX(pIndex);
@@ -100,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < keyInfos.size(); i++) {
           KeyInfo keyInfo = keyInfos.get(i);
           if (keyInfo.getPointerId() != null) {
-            if (!isInside(pX, pY, keyInfo.getIvKey()) && pointerAction == MotionEvent.ACTION_MOVE) {
+            if (!isInside(pX, pY, keyInfo.getIvKey())) {
               if (keyInfo.getPointerId() == pId) {
                 keyInfo.setPointerId(null);
                 setPressed(keyInfo, false);
@@ -108,37 +105,11 @@ public class MainActivity extends AppCompatActivity {
             }
           }
         }
-
-        KeyInfo pressedKeyInfo = findPressedKeyInfo(pX, pY);
-        if (pressedKeyInfo != null) {
-          setPressed(pressedKeyInfo, true);
-          if (pressedKeyInfo.getPointerId() == null) {
-            pressedKeyInfo.setPointerId(pId);
-            
-            if (pressedKeyInfo.getMediaPlayer() != null) {
-              pressedKeyInfo.getMediaPlayer().release();
-            }
-
-            MediaPlayer player = new MediaPlayer();
-            pressedKeyInfo.setMediaPlayer(player);
-            try {
-              AssetFileDescriptor afd = getAssets().openFd("d" + keyInfos.indexOf(pressedKeyInfo) + ".wav");
-              player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-              player.prepare();
-              player.start();
-              final MediaPlayer finalPlayer = player;
-              player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                  finalPlayer.release();
-                }
-              });
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-          }
-        }
+        pressing(pX, pY, pId);
       }
+    } else if (pointerAction == MotionEvent.ACTION_DOWN
+            || pointerAction == MotionEvent.ACTION_POINTER_DOWN) {
+      pressing(event.getX(lastPointerIndex), event.getY(lastPointerIndex), event.getPointerId(lastPointerIndex));
     } else if (pointerAction == MotionEvent.ACTION_POINTER_UP
             || pointerAction == MotionEvent.ACTION_UP) {
       KeyInfo keyInfo = findPressedKeyInfo(event.getX(lastPointerIndex), event.getY(lastPointerIndex));
@@ -149,6 +120,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     return super.onTouchEvent(event);
+  }
+
+  private void pressing(float pX, float pY, int pId) {
+    KeyInfo pressedKeyInfo = findPressedKeyInfo(pX, pY);
+    if (pressedKeyInfo != null) {
+      setPressed(pressedKeyInfo, true);
+      if (pressedKeyInfo.getPointerId() == null) {
+        pressedKeyInfo.setPointerId(pId);
+
+        if (pressedKeyInfo.getMediaPlayer() != null) {
+          pressedKeyInfo.getMediaPlayer().release();
+        }
+
+        MediaPlayer player = new MediaPlayer();
+        pressedKeyInfo.setMediaPlayer(player);
+        try {
+          AssetFileDescriptor afd = getAssets().openFd("d" + keyInfos.indexOf(pressedKeyInfo) + ".wav");
+          player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+          player.prepare();
+          player.start();
+          final MediaPlayer finalPlayer = player;
+          player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+              finalPlayer.release();
+            }
+          });
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
   }
 
   private KeyInfo findPressedKeyInfo(float pX, float pY) {

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.khoabeo.layouttraining.MainActivity">
+
+    <!--<View-->
+    <!--android:id="@+id/vFixed"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:background="@color/colorAccent"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp" />-->
+    <!---->
+    <!--<View-->
+    <!--android:layout_width="100dp"-->
+    <!--android:layout_alignLeft="@+id/vFixed"-->
+    <!--android:background="@color/colorPrimary"-->
+    <!--android:layout_height="40dp" />-->
+
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_marginRight="50dp"-->
+    <!--android:background="@color/colorAccent"-->
+    <!--android:layout_marginTop="30dp"-->
+    <!--android:layout_marginLeft="50dp"-->
+    <!--android:layout_marginBottom="30dp"-->
+    <!--android:layout_height="match_parent" />-->
+    <!--<View-->
+    <!--android:id="@+id/vFixed"-->
+    <!--android:background="@color/colorAccent"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_margin = "10dp"-->
+    <!--android:layout_width="40dp"-->
+    <!--android:layout_height="40dp" />-->
+    <!---->
+    <!--<View-->
+    <!--android:layout_toLeftOf="@id/vFixed"-->
+    <!--android:background="@color/colorPrimary"-->
+    <!--android:layout_margin="10dp"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="40dp" />-->
+
+    <!--<EditText-->
+    <!--android:id="@+id/et_user_name"-->
+    <!--android:hint="User name"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"/>-->
+    <!---->
+    <!--<EditText-->
+    <!--android:id="@+id/et_password"-->
+    <!--android:layout_marginTop="16dp"-->
+    <!--android:inputType="textPassword"-->
+    <!--android:hint="Password"-->
+    <!--android:layout_below="@+id/et_user_name"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"/>-->
+    <!---->
+    <!--<LinearLayout-->
+    <!--android:layout_below="@id/et_password"-->
+    <!--android:layout_marginTop="16dp"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
+    <!--<Button-->
+    <!--android:text="Login"-->
+    <!--android:background="#00000000"-->
+    <!--android:textColor="@color/colorAccent"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:textAllCaps="false"-->
+    <!--android:layout_height="wrap_content"/>-->
+
+    <!--<Button-->
+    <!--android:background="@color/colorAccent"-->
+    <!--android:textColor="#FFFF"-->
+    <!--android:text="Register"-->
+    <!--android:textAllCaps="false"-->
+    <!--android:layout_weight="1"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"/>-->
+    <!--</LinearLayout>-->
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toRightOf="@+id/imageView3"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@color/colorAccent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="1.0"/>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@color/colorAccent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"/>
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toRightOf="@+id/imageView2"
+        app:layout_constraintRight_toLeftOf="@+id/imageView4"
+        app:srcCompat="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.502"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5"/>
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:srcCompat="@android:color/holo_blue_bright"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline3"
+        app:layout_constraintRight_toLeftOf="@+id/guideline2"
+        android:layout_marginRight="8dp"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline2"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline3"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2"/>
+
+</android.support.constraint.ConstraintLayout>

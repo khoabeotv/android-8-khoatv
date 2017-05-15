@@ -1,4 +1,4 @@
-package teambandau.truyenratngan;
+package teambandau.testimagebasicdownload;
 
 import org.junit.Test;
 

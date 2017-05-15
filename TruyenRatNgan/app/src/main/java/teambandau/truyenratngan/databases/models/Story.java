@@ -1,21 +1,43 @@
 package teambandau.truyenratngan.databases.models;
 
+import java.io.Serializable;
+
+import teambandau.truyenratngan.StoryApplication;
+import teambandau.truyenratngan.adapters.StoryAdapter;
+
 /**
  * Created by KhoaBeo on 4/18/2017.
  */
 
-public class Story {
+public class Story implements Serializable {
 
+  private int id;
   private String title;
   private String image;
   private String des;
   private Boolean isFavorite;
+  private int lastChapterNo;
 
-  public Story(String title, String image, String des, Boolean isFavorite) {
+  public Story(int id, String title, String image, String des, Boolean isFavorite, int lastChapterNo) {
+    this.id = id;
     this.title = title;
     this.image = image;
     this.des = des;
     this.isFavorite = isFavorite;
+    this.lastChapterNo = lastChapterNo;
+  }
+
+  public int getLastChapterNo() {
+    return lastChapterNo;
+  }
+
+  public void setLastChapterNo(int lastChapterNo) {
+    this.lastChapterNo = lastChapterNo;
+    StoryApplication.getInstance().getStoryDatabase().updateLastChapterNo(id, lastChapterNo);
+  }
+
+  public int getId() {
+    return id;
   }
 
   public String getTitle() {

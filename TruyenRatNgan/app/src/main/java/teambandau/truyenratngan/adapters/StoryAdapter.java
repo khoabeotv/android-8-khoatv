@@ -44,7 +44,7 @@ public class StoryAdapter extends BaseAdapter {
 
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
-    Story story = stories.get(position);
+    final Story story = stories.get(position);
 
     if (convertView == null) {
       LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
@@ -55,10 +55,29 @@ public class StoryAdapter extends BaseAdapter {
     TextView tvDescription = (TextView) convertView.findViewById(R.id.tv_description);
     ImageView ivStory = (ImageView) convertView.findViewById(R.id.iv_story);
     ProgressBar progressBar = (ProgressBar) convertView.findViewById(R.id.pb_loading);
+    final ImageView ivFav = (ImageView) convertView.findViewById(R.id.iv_fav);
 
     tvTitle.setText(story.getTitle());
     Util.makeFit(tvDescription);
     tvDescription.setText(story.getDes());
+    if (story.isFavorite()) {
+      ivFav.setImageResource(R.drawable.ic_favorite_black_24dp);
+    } else {
+      ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+    }
+
+    ivFav.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (story.isFavorite()) {
+          ivFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+          story.setFavorite(false);
+        } else {
+          ivFav.setImageResource(R.drawable.ic_favorite_black_24dp);
+          story.setFavorite(true);
+        }
+      }
+    });
 
     new ImageLoader().setView(ivStory, progressBar).loadingImage(story.getImage());
 

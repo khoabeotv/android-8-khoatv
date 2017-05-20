@@ -52,8 +52,13 @@ public class Story implements Serializable {
     return des;
   }
 
-  public Boolean getFavorite() {
+  public Boolean isFavorite() {
     return isFavorite;
+  }
+
+  public void setFavorite(Boolean favorite) {
+    isFavorite = favorite;
+    StoryApplication.getInstance().getStoryDatabase().updateFavorite(id, favorite);
   }
 
   @Override

@@ -1,52 +1,38 @@
 package teambandau.truyenratngan;
 
-import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 
-import java.util.List;
+import teambandau.truyenratngan.fragments.StoryListFragment;
 
-import teambandau.truyenratngan.adapters.StoryAdapter;
-import teambandau.truyenratngan.databases.StoryDatabase;
-import teambandau.truyenratngan.databases.models.Story;
-
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-
-  public static final List<Story> stories = StoryApplication.getInstance().getStoryDatabase().loadAllStories();
-  private StoryAdapter storyAdapter;
-  private ListView lvStory;
+public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    lvStory = (ListView) findViewById(R.id.story_list);
-
-//    loadData();
-    setUpUI();
+    displayStartScreen();
   }
 
-  private void setUpUI() {
-    storyAdapter = new StoryAdapter(stories);
-    lvStory.setAdapter(storyAdapter);
-    lvStory.setOnItemClickListener(this);
+  private void displayStartScreen() {
+    //1. Create fragment
+    StoryListFragment storyListFragment = new StoryListFragment();
+    changeScreen(storyListFragment, false);
   }
 
-//  private void loadData() {
-//    StoryDatabase storyDatabase = StoryApplication.getInstance().getStoryDatabase();
-//    stories = storyDatabase.loadAllStories();
-//  }
+  public void changeScreen(Fragment fragment, boolean addToBackStack) {
+    //2. Create a transaction
+    FragmentManager fragmentManager = getSupportFragmentManager();
+    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+    fragmentTransaction.replace(R.id.fl_main, fragment);
+    if (addToBackStack)
+      fragmentTransaction.addToBackStack(null);
 
-  @Override
-  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-    Intent intent = new Intent(MainActivity.this, StoryDetailActivity.class);
-//    intent.putExtra("Story", stories.get(position));
-    intent.putExtra("StoryPosition", position);
-    startActivity(intent);
+    //3. Commit
+    fragmentTransaction.commit();
   }
 }

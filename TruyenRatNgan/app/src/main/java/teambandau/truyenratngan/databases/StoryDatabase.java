@@ -81,12 +81,23 @@ public class StoryDatabase extends SQLiteAssetHelper {
   }
 
   public void updateLastChapterNo(int storyId, int lastChapterNo) {
-    SQLiteDatabase db = getReadableDatabase();
+    SQLiteDatabase db = getWritableDatabase();
 
     ContentValues contentValues = new ContentValues();
     contentValues.put(STORY_LAST_CHAPTER_NO, lastChapterNo);
 
     db.update("tbl_story", contentValues, "id=" + storyId, null);
+    db.close();
+  }
+
+  public void updateFavorite(int storyId, boolean favorite) {
+    SQLiteDatabase db = getWritableDatabase();
+
+    ContentValues contentValues = new ContentValues();
+    contentValues.put(STORY_IS_FAVORITE, favorite ? 1 : 0);
+
+    db.update("tbl_story", contentValues, "id=" + storyId, null);
+    db.close();
   }
 
   public int getChapterCount(Story story) {

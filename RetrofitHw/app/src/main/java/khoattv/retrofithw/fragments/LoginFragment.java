@@ -22,7 +22,7 @@ import khoattv.retrofithw.MainActivity;
 import khoattv.retrofithw.R;
 import khoattv.retrofithw.networks.Request;
 import khoattv.retrofithw.networks.Response;
-import khoattv.retrofithw.networks.NetworkService;
+import khoattv.retrofithw.networks.LoginService;
 import khoattv.retrofithw.networks.RetrofitFactory;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -89,8 +89,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     switch (v.getId()) {
       case R.id.btn_sign_in:
         if (checkTextInput(etPassword) && checkTextInput(etUsername)) {
-          NetworkService networkService = RetrofitFactory.getInstance().createService(NetworkService.class);
-          networkService.login(new Request(etUsername.getText().toString(), etPassword.getText().toString()))
+          LoginService loginService = RetrofitFactory.getInstance().createService(LoginService.class);
+          loginService.login(new Request(etUsername.getText().toString(), etPassword.getText().toString()))
                   .enqueue(new Callback<Response>() {
                     @Override
                     public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {

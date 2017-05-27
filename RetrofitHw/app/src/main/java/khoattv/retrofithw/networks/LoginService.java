@@ -8,10 +8,7 @@ import retrofit2.http.POST;
  * Created by KhoaBeo on 5/27/2017.
  */
 
-public interface NetworkService {
+public interface LoginService {
   @POST("login")
   Call<Response> login(@Body Request request);
-
-  @POST("register")
-  Call<Response> register(@Body Request request);
 }

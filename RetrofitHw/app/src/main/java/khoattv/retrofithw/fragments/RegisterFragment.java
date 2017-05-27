@@ -7,6 +7,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,8 @@ import android.widget.Toast;
 
 import khoattv.retrofithw.MainActivity;
 import khoattv.retrofithw.R;
-import khoattv.retrofithw.networks.NetworkService;
+import khoattv.retrofithw.networks.LoginService;
+import khoattv.retrofithw.networks.RegisterService;
 import khoattv.retrofithw.networks.Request;
 import khoattv.retrofithw.networks.Response;
 import khoattv.retrofithw.networks.RetrofitFactory;
@@ -67,12 +69,12 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     switch (v.getId()) {
       case R.id.btn_sign_up:
         if (LoginFragment.checkTextInput(etPassword) && LoginFragment.checkTextInput(etUsername)) {
-          NetworkService networkService = RetrofitFactory.getInstance().createService(NetworkService.class);
-          networkService.register(new Request(etUsername.getText().toString(), etPassword.getText().toString()))
+          RegisterService registerService = RetrofitFactory.getInstance().createService(RegisterService.class);
+          registerService.register(new Request(etUsername.getText().toString(), etPassword.getText().toString()))
                   .enqueue(new Callback<Response>() {
                     @Override
                     public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
-                      if (response.code() == 200) {
+                      if (response.code() == 307) {
                         Toast.makeText(getActivity(), "Sign up success!", Toast.LENGTH_SHORT).show();
                       } else {
                         ilPassword.setError("User already exists!");

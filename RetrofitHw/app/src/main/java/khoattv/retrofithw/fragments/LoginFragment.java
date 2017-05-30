@@ -22,7 +22,7 @@ import khoattv.retrofithw.MainActivity;
 import khoattv.retrofithw.R;
 import khoattv.retrofithw.networks.Request;
 import khoattv.retrofithw.networks.Response;
-import khoattv.retrofithw.networks.LoginService;
+import khoattv.retrofithw.networks.NetworksService;
 import khoattv.retrofithw.networks.RetrofitFactory;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -80,6 +80,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     if (!username.equals("") && !password.equals("")) {
       etPassword.setText(password);
       etUsername.setText(username);
+      remember = true;
+      imRemember.setImageResource(R.drawable.ic_check_circle_black_24dp);
     }
     return view;
   }
@@ -89,8 +91,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     switch (v.getId()) {
       case R.id.btn_sign_in:
         if (checkTextInput(etPassword) && checkTextInput(etUsername)) {
-          LoginService loginService = RetrofitFactory.getInstance().createService(LoginService.class);
-          loginService.login(new Request(etUsername.getText().toString(), etPassword.getText().toString()))
+          NetworksService networksService = RetrofitFactory.getInstance().createService(NetworksService.class);
+          networksService.login(new Request(etUsername.getText().toString(), etPassword.getText().toString()))
                   .enqueue(new Callback<Response>() {
                     @Override
                     public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
@@ -100,7 +102,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                           editor.putString("username", etUsername.getText().toString().trim());
                           editor.putString("password", etPassword.getText().toString().trim());
                           editor.commit();
+                        } else {
+                          editor.putString("username", "");
+                          editor.putString("password", "");
+                          editor.commit();
                         }
+                        ((MainActivity) getActivity()).changeScreen(new TaskFragment().setUserToken(response.body().getAccessToken()), true);
                       } else {
                         ilPassword.setError("Username or Password is incorrect!");
                       }
@@ -108,7 +115,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onFailure(Call<Response> call, Throwable t) {
-                      Toast.makeText(getActivity(), "No Internet!", Toast.LENGTH_SHORT).show();
+                      Toast.makeText(getActivity(), "No Connection!", Toast.LENGTH_SHORT).show();
                     }
                   });
         }
@@ -129,7 +136,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
 
   public static boolean checkTextInput(EditText editText) {
     String s = editText.getText().toString().trim();
-    if (s.length() < 4)
+    if (s.length() < MIN_LENGTH_INPUT)
       return false;
     char[] chars = s.toCharArray();
     for (int i = 0; i < chars.length; i++) {

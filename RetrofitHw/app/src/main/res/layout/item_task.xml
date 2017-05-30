@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="16dp"
+              android:background="@color/colorPrimary"
+              android:orientation="horizontal">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="8">
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:textColor="#FFFF"
+            android:layout_height="wrap_content"
+            android:text="bbbb"
+            android:maxLines="1"
+            android:textSize="22sp"/>
+
+        <TextView
+            android:id="@+id/tv_title_date"
+            android:layout_below="@+id/tv_name"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFF"
+            android:text="Date:"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/tv_name"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFF"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/tv_title_date"
+            android:text="bbbb"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tv_title_payment_per_hour"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFF"
+            android:layout_below="@id/tv_title_date"
+            android:text="Payment per hour:"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/tv_payment_per_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_title_date"
+            android:textColor="#FFFF"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/tv_title_payment_per_hour"
+            android:text="bbbb"
+            android:textSize="18sp"/>
+    </RelativeLayout>
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

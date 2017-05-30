@@ -7,7 +7,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,7 @@ import android.widget.Toast;
 
 import khoattv.retrofithw.MainActivity;
 import khoattv.retrofithw.R;
-import khoattv.retrofithw.networks.LoginService;
-import khoattv.retrofithw.networks.RegisterService;
+import khoattv.retrofithw.networks.NetworksService;
 import khoattv.retrofithw.networks.Request;
 import khoattv.retrofithw.networks.Response;
 import khoattv.retrofithw.networks.RetrofitFactory;
@@ -69,27 +67,29 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     switch (v.getId()) {
       case R.id.btn_sign_up:
         if (LoginFragment.checkTextInput(etPassword) && LoginFragment.checkTextInput(etUsername)) {
-          RegisterService registerService = RetrofitFactory.getInstance().createService(RegisterService.class);
-          registerService.register(new Request(etUsername.getText().toString(), etPassword.getText().toString()))
+          NetworksService networksService = RetrofitFactory.getInstance().createService(NetworksService.class);
+          networksService.register(new Request(etUsername.getText().toString(), etPassword.getText().toString()))
                   .enqueue(new Callback<Response>() {
                     @Override
                     public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
                       if (response.code() == 307) {
-                        Toast.makeText(getActivity(), "Sign up success!", Toast.LENGTH_SHORT).show();
+                        ((MainActivity) getActivity()).changeScreen(new TaskFragment().setUserToken(response.body().getAccessToken()), true);
                       } else {
-                        ilPassword.setError("User already exists!");
+                        ilUsername.setError("User already exists!");
                       }
                     }
 
                     @Override
                     public void onFailure(Call<Response> call, Throwable t) {
-                      Toast.makeText(getActivity(), "No Internet!", Toast.LENGTH_SHORT).show();
+                      Toast.makeText(getActivity(), "No Connection!", Toast.LENGTH_SHORT).show();
                     }
                   });
         }
         break;
       case R.id.tv_sign_in:
         ((MainActivity) getActivity()).changeScreen(new LoginFragment(), false);
+        getFragmentManager().popBackStack();
+        break;
     }
   }
 

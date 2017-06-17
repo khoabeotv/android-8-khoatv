@@ -1,6 +1,10 @@
-package khoattv.freemusic.networks;
+package khoattv.freemusic.networks.music_type;
+
+import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
+
+import khoattv.freemusic.fragments.MusicTypesFragment;
 
 /**
  * Created by KhoaBeo on 5/23/2017.
@@ -9,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
 public class MusicType {
   private String id;
 
-  @SerializedName("translation_key")
+  @SerializedName("name")
   private String translationKey;
 
   public MusicType(String id, String translationKey) {

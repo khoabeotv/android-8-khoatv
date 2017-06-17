@@ -16,7 +16,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import khoattv.freemusic.R;
 import khoattv.freemusic.databases.model.MusicTypesModel;
-import khoattv.freemusic.networks.MusicType;
 
 /**
  * Created by KhoaBeo on 5/28/2017.
@@ -26,10 +25,15 @@ public class MusicTypesAdapter extends RecyclerView.Adapter<MusicTypesAdapter.Mu
 
   private List<MusicTypesModel> musicTypesModels;
   private Context context;
+  private View.OnClickListener onClickListener;
 
   public MusicTypesAdapter(List<MusicTypesModel> musicTypesModels, Context context) {
     this.musicTypesModels = musicTypesModels;
     this.context = context;
+  }
+
+  public void setOnClickListener(View.OnClickListener onClickListener) {
+    this.onClickListener = onClickListener;
   }
 
   @Override
@@ -37,6 +41,7 @@ public class MusicTypesAdapter extends RecyclerView.Adapter<MusicTypesAdapter.Mu
     LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
     View view = layoutInflater.inflate(R.layout.item_rv_music_types, parent, false);
     MusicTypesViewHolder musicTypesViewHolder = new MusicTypesViewHolder(view);
+    view.setOnClickListener(onClickListener);
     return musicTypesViewHolder;
   }
 
@@ -55,15 +60,20 @@ public class MusicTypesAdapter extends RecyclerView.Adapter<MusicTypesAdapter.Mu
     ImageView imageView;
     @BindView(R.id.tv_music_type)
     TextView textView;
+    View view;
 
     public MusicTypesViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
+      view = itemView;
     }
 
     public void setData(MusicTypesModel data) {
-      textView.setText(data.getKey());
-      Picasso.with(context).load(data.getIdImage()).into(imageView);
+      if (data != null) {
+        textView.setText(data.getKey());
+        Picasso.with(context).load(data.getIdImage()).into(imageView);
+        view.setTag(data);
+      }
     }
   }
 }

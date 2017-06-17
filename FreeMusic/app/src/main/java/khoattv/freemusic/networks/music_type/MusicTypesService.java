@@ -1,4 +1,4 @@
-package khoattv.freemusic.networks;
+package khoattv.freemusic.networks.music_type;
 
 import java.util.List;
 
@@ -10,6 +10,6 @@ import retrofit2.http.GET;
  */
 
 public interface MusicTypesService {
-  @GET("data/media-types.json")
-  Call<List<MediaType>> getMediaTypes();
+  @GET("https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres")
+  Call<ITunesType> getMediaTypes();
 }

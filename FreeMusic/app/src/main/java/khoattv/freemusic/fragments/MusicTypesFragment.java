@@ -4,12 +4,14 @@ package khoattv.freemusic.fragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +19,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import khoattv.freemusic.R;
-import khoattv.freemusic.activities.MainActivity;
 import khoattv.freemusic.adapters.MusicTypesAdapter;
 import khoattv.freemusic.databases.model.MusicTypesModel;
-import khoattv.freemusic.networks.MediaType;
-import khoattv.freemusic.networks.MusicType;
-import khoattv.freemusic.networks.MusicTypesService;
+import khoattv.freemusic.events.OnClickMusicTypeModel;
+import khoattv.freemusic.managers.ScreenManager;
+import khoattv.freemusic.networks.music_type.ITunesType;
+import khoattv.freemusic.networks.music_type.MediaType;
+import khoattv.freemusic.networks.music_type.MusicType;
+import khoattv.freemusic.networks.music_type.MusicTypesService;
 import khoattv.freemusic.networks.RetrofitFactory;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,7 +35,7 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MusicTypesFragment extends Fragment {
+public class MusicTypesFragment extends Fragment implements View.OnClickListener {
 
   @BindView(R.id.rv_music_types)
   RecyclerView recyclerView;
@@ -56,11 +60,11 @@ public class MusicTypesFragment extends Fragment {
 
   private void loadData() {
     MusicTypesService musicTypesService = RetrofitFactory.getInstance().createService(MusicTypesService.class);
-    musicTypesService.getMediaTypes().enqueue(new Callback<List<MediaType>>() {
+    musicTypesService.getMediaTypes().enqueue(new Callback<ITunesType>() {
       @Override
-      public void onResponse(Call<List<MediaType>> call, Response<List<MediaType>> response) {
-        MediaType mediaType = response.body().get(3);
-        List<MusicType> musicTypes = mediaType.getSubgenres();
+      public void onResponse(Call<ITunesType> call, Response<ITunesType> response) {
+        List<MusicType> musicTypes = response.body().getMediaType().getSubgenres().getListMusicTypes();
+
         for (MusicType musicType : musicTypes) {
           musicTypesModels.add(new MusicTypesModel(
                           musicType.getId(),
@@ -70,10 +74,11 @@ public class MusicTypesFragment extends Fragment {
           );
         }
         recyclerView.getAdapter().notifyDataSetChanged();
+
       }
 
       @Override
-      public void onFailure(Call<List<MediaType>> call, Throwable t) {
+      public void onFailure(Call<ITunesType> call, Throwable t) {
         Toast.makeText(getActivity(), "No Connection!", Toast.LENGTH_SHORT).show();
       }
     });
@@ -90,6 +95,13 @@ public class MusicTypesFragment extends Fragment {
       }
     });
     recyclerView.setLayoutManager(gridLayoutManager);
+    ((MusicTypesAdapter) recyclerView.getAdapter()).setOnClickListener(this);
   }
 
+  @Override
+  public void onClick(View v) {
+    MusicTypesModel musicTypesModel = (MusicTypesModel) v.getTag();
+    ScreenManager.openFragment(getFragmentManager(), new TopSongsFragment(), R.id.rl_main, true, false);
+    EventBus.getDefault().postSticky(new OnClickMusicTypeModel(musicTypesModel));
+  }
 }
